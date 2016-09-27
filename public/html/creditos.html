@@ -1,0 +1,20 @@
+<div ng-controller="creditosController">
+	<a ng-click="link_main();">Gerenciador</a>
+	<table border="0" style="width:60%">
+		<tr>
+			<td>Codigo</td>
+			<td>Descrição</td>
+			<td>Status</td>
+		</tr>
+		<tr ng-repeat="p in datas">
+			<td>{{p.id}}</td>
+			<td>{{p.descricao}}</td>
+			<td>{{p.status}}</td>
+		</tr>
+	</table>
+	<form class="login-form">
+		<input ng-model="d.descricao" placeholder="descricao">
+		<input ng-model="d.status" ng-init="d.status = 1" type="hidden">
+		<button type="button" ng-click="save(d);">Gravar</button>
+	</form>
+</div>

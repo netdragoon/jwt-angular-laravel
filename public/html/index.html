@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <title>Angular com Jwt Api</title>
+    <script src="/js/jquery-2.2.4.min.js"></script>
+    <script src="/js/angular.min.js"></script>
+    <script src="/js/angular-route.min.js"></script>
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Roboto:300);
+    </style>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div ng-controller="mainController" style="width:100%">
+        <div  style="width:100%" ng-view></div>
+    </div>
+    <script>
+        var app = angular.module('app', ['ngRoute']);
+        app.run(function($rootScope,$location){
+            $rootScope.token = "";
+            $rootScope.getToken = function()
+            {
+                return "Bearer " + $rootScope.token;
+            };
+            $rootScope.init = function()
+            {
+                if ($rootScope.token === "")
+                {
+                    $location.path('/login');
+
+                } else return true;
+            };
+        });
+        app.config(function($routeProvider) {
+            $routeProvider
+                .when('/', {
+                    templateUrl : '/html/main.html',
+                    controller  : 'mainController'
+                })            
+                .when('/creditos', {
+                    templateUrl : '/html/creditos.html',
+                    controller  : 'creditosController'
+                })
+                .when('/login', {
+                    templateUrl : '/html/login.html',
+                    controller  : 'loginController'
+                }).otherwise('/');
+        });
+        app.controller('mainController', function($scope, $rootScope, $location, $http){            
+            $scope.link_creditos = function()
+            {
+                $location.path('/creditos');
+            };
+            $rootScope.init();
+        });
+        app.controller('creditosController', function($scope, $rootScope, $location, $http){
+            $scope.datas = [];
+            $scope.link_main = function()
+            {
+                $location.path('/');
+            };
+            $scope.load = function()
+            {
+                $http.defaults.headers.common['Authorization'] = $rootScope.getToken();
+                $http.get('http://localhost:8000/api/creditos')
+                    .then(function(result){
+                        $scope.datas = result.data;
+                    });
+            };
+            $scope.save = function(d)
+            {
+                $http.defaults.headers.common['Authorization'] = $rootScope.getToken();
+                $http.post('http://localhost:8000/api/creditos', d)
+                    .then(function(result){
+                        if (parseInt(result.status) === 200) {
+                            $scope.datas.push(result.data);
+                        };
+                    });
+            }                 
+            if ($rootScope.init())
+            {
+                $scope.load();
+            }
+        });
+        app.controller('loginController', function($scope, $rootScope, $http, $location){
+            $scope.email = "dias.fulvio@gmail.com";
+            $scope.password = "secret";
+            $scope.login = function()
+            {
+                if ($scope.email != "" && $scope.password != "")
+                {
+                    var data = {'email':$scope.email, 'password':$scope.password};
+                    $http.post('http://localhost:8000/api/login', data)
+                            .then(function(result)
+                            {
+                                console.log(result);
+                                if (parseInt(result.status) === 200)
+                                {
+                                    $rootScope.token = result.data.token;
+                                    console.log($rootScope);
+                                    $location.path('/');
+                                }  
+                                else
+                                {
+                                    alert("Dados inválidos");
+                                }                              
+                            });
+                    return;
+                } 
+                alert("E-mail e senha inválidos");
+            }
+        });
+        $('.message a').click(function(){
+            $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+        });
+    </script>
+</body>
+</html>
