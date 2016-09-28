@@ -17,9 +17,9 @@ class CreditosController extends Controller
 
     public function index()
     {
-        return $this->model
+        return response()->json($this->model
             ->all()
-            ->toArray();
+            ->toArray());
     }
 
     public function store(Request $request)
