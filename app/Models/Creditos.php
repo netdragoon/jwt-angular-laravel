@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Creditos extends Model
 {
+
     protected $primaryKey = "id";
     protected $fillable = array(
         'descricao',
@@ -13,4 +14,5 @@ class Creditos extends Model
     );
     protected $table = "creditos";
     public $timestamps = false;
+    
 }

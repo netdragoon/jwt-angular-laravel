@@ -179,6 +179,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
 
+        App\Providers\ViewComposerCreditos::class,
+        Jenssegers\Mongodb\MongodbServiceProvider::class,
     ],
 
     /*
@@ -227,6 +229,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
+        'Moloquent' => Jenssegers\Mongodb\Eloquent\Model::class
     ],
 
 ];

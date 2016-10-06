@@ -14,3 +14,5 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('agenda', ['as' => 'agenda.index', 'uses' => 'AgendaController@index']);
