@@ -12,5 +12,11 @@
         @foreach($drop as $key => $value)
             <p>{!! $key !!} - {!! $value !!}</p>
         @endforeach
+
+        <form action="/logout" method="post">
+            {{ csrf_field() }}
+            <button>Sair</button>
+        </form>
+{{\Auth::guard()->user()->email}}
     </body>
 </html>
